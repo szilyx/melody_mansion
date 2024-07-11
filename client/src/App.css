@@ -1,0 +1,10 @@
+body{
+	background-image: url("images/second_background_image.png"); ;
+}
+
+#main-title{
+    color: rgb(255, 255, 255);
+    font-family: 'Franklin Gothic', sans-serif;
+    text-align: center;
+    font-size: 70px;
+}

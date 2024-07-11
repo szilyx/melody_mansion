@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-
+import ListItem from "./ListItem";
+import "./ListItem.css";
+import "./App.css";
 function App() {
   const [artists, setArtists] = useState([]);
 
@@ -21,10 +23,10 @@ function App() {
 
     return (
     <div className="container">
-      <h1>Előadók</h1>
+      <h1 id="main-title">Artists</h1>
       <ul>
         {artists.map(artist => (
-          <li key={artist.id}>{artist.name}</li>
+          <li key={artist.id}><ListItem name={artist.name}/></li>
         ))}
       </ul>
     </div>
