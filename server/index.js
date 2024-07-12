@@ -37,12 +37,29 @@ app.get("/albums", async (req, res) =>{
     try{
         const result = await db.query("SELECT * FROM albums WHERE artist_id=$1",[artistId]);
         res.json(result.rows);
-        console.log(result);
+        //console.log(result);
     }catch(err){
         console.error(err);
         res.status(500).json({error: "Error while reading data"});
     }
 });
+
+app.get("/songs", async (req, res) =>{
+    const {albumId} = req.query;
+    if(!albumId){
+        return res.status(400).json({error: "Missing parameter"});
+    }
+    try{
+        const result = await db.query("SELECT * FROM songs WHERE album_id = $1",[albumId]);
+        res.json(result.rows);
+        //console.log(result);
+    }catch(err){
+        console.error(err);
+        res.status(500).json({error: "Error while reading data"});
+    }
+});
+
+
 
 app.listen(port, ()=>{
     console.log(`Server is running on http://localhost:${port}`)
