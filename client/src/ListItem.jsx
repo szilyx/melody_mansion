@@ -6,42 +6,73 @@ import AddIcon from '@mui/icons-material/Add';
 function ListItem({ artist }) {
   const [open, setOpen] = useState(false);
   const [albums, setAlbums] = useState([]);
+  const [songs, setSongs] = useState({});
+  const [openAlbums, setOpenAlbums] = useState({});
 
-  useEffect(()=>{
-    async function fetchAlbums(){
-      try{
-        const resp = await fetch(`http://localhost:3000/albums?artistId=${artist.id}`);
-        if(!resp.ok){
-          throw new Error('Network responese was not ok');
-        }
-        const data = await resp.json();
-        console.log(data);
-        setAlbums(data);
-      }catch(error){
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const albumsResp = await fetch(`http://localhost:3000/albums?artistId=${artist.id}`);
+        const albumsData = await albumsResp.json();
+        setAlbums(albumsData);
+
+        const songsData = {};
+        await Promise.all(albumsData.map(async (album) => {
+          const resp = await fetch(`http://localhost:3000/songs?albumId=${album.id}`);
+          const data = await resp.json();
+          songsData[album.id] = data;
+        }));
+        setSongs(songsData);
+      } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchAlbums();
-  },[]);
+    fetchData();
+  }, [artist.id]);
 
   function expand() {
     setOpen(!open);
   }
 
+  function toggleAlbum(albumId) {
+    setOpenAlbums(prev => ({
+      ...prev,
+      [albumId]: !prev[albumId]
+    }));
+  }
+
   return (
-    <div className="listItem" style={{borderRadius: open ? "2cap" : null}}>
-      <h1> <LibraryMusicIcon style={{paddingRight:20}}/>{artist.name}  
-        <span className="spacer"></span> 
+    <div className="listItem" style={{ borderRadius: open ? "2cap" : null }}>
+      <h1>
+        <LibraryMusicIcon style={{ paddingRight: 20 }} />{artist.name}
+        <span className="spacer"></span>
         <Fab size="small" color="secondary" aria-label="add" onClick={expand}>
           <AddIcon />
         </Fab>
       </h1>
       {open && (
         <div className={`albums ${open ? 'open' : ''}`}>
-        {albums.map(album => (
-          <p key={album.id}>{album.title}</p>
-        ))}
-      </div>
+          {albums.map(album => (
+            <div key={album.id} className="album-item">
+               <p style={{ borderRadius: openAlbums[album.id] ? "20px 20px 0px 0px" : "20px" }}>{album.title}
+                <span className="spacer"> </span>
+                <Fab size="small" color="secondary" aria-label="add" onClick={() => toggleAlbum(album.id)}>
+                  <AddIcon />
+                </Fab>
+              </p>
+              {openAlbums[album.id] && (
+                <ul className="listed-songs">
+                    {songs[album.id]?.map(song => (
+                    <li key={song.id} className="song-item">
+                        <span className="song-title">{song.title}</span>
+                        <span className="song-length">{song.length.hours}:{song.length.minutes}</span>
+                    </li>
+                    ))}
+                </ul>
+                )}
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

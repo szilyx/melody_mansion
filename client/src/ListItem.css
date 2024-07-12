@@ -29,19 +29,55 @@ ul {
     display: flex;
     align-items: center;
     color: rgb(255, 255, 255);
-    font-family:'Times New Roman', Times, serif;
-    font-weight: bold;
+    font-family: 'Franklin Gothic', sans-serif;
     padding:5px;
-    font-size:20px;
+    font-size:25px;
     padding-left:30px;
     margin-left:20px;
     background-color: rgb(141, 141, 115);
-    border-radius: 2cap;
-    max-width: 200px;
+    padding-right:10px;
+    padding-top:5px;
+    padding-bottom:5px;
+    margin-bottom:0px;
+    border-bottom:0px;
 }
 
 .albums {
   margin-top: 10px;
   transition: opacity 0.3s ease; 
   padding-bottom:20px;
+  width:560px;
+  
 }
+
+.listed-songs{
+    font-size: 20px;
+    background-color: rgb(189, 189, 161);
+    border-radius: 0 0 2cap 2cap;
+    padding-top:10px;
+    margin-top:0;
+    border-top:0;
+    margin-left:20px;
+    padding-bottom:10px;
+    list-style-type: none;
+    padding: 30px;
+    
+}
+
+
+  .song-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    font-family: 'Franklin Gothic', sans-serif;
+  }
+  
+  .song-title {
+    flex-grow: 1;
+  }
+  
+  .song-length {
+    text-align: right;
+  }
+  
