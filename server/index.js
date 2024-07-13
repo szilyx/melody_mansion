@@ -17,6 +17,7 @@ db.connect();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 
 app.get("/artists",async (req, res) =>{
     try{
@@ -59,8 +60,39 @@ app.get("/songs", async (req, res) =>{
     }
 });
 
+app.get("/favorites",async (req, res) =>{
+    try{
+        const result = await db.query("SELECT * FROM favorites");
+        res.json(result.rows);
+    }catch(err){
+        console.error(err);
+        res.status(500).json({error: "Error while reading data"});
+    }
+})
 
+app.get("/favoriteSongs", async (req, res) =>{
+    try{
+        const result = await db.query("SELECT * FROM favoritesongs");
+        res.json(result.rows);
+    }catch(err){
+        console.error(err);
+        res.status(500).json({error: "Error while reading data"});
+    }
+})
 
+app.post("/favoritesPost", async (req, res) =>{
+    const {name} = req.body;
+    if(!name){
+        return res.status(400).json({error: "Missing parameter"});
+    }
+    try{
+        const result = await db.query("INSERT INTO favorites (name) VALUES ($1) RETURNING *",[name]);
+        res.status(201).json(result.rows[0]);
+    }catch(err){
+        console.error(err);
+        res.status(500).json({error: "Error while inserting data"});
+    }
+})
 app.listen(port, ()=>{
     console.log(`Server is running on http://localhost:${port}`)
 })
