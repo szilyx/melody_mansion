@@ -5,13 +5,14 @@ import "./PlayList.css";
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AlarmIcon from '@mui/icons-material/Alarm';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import EditIcon from '@mui/icons-material/Edit';
 
 function PlayList() {
     const [favorites, setFavorites] = useState([]);
     const [songs, setSongs] = useState({});
     const [openPlaylists, setOpenPlaylists] = useState({});
+    const [editPlaylistId, setEditPlaylistId] = useState(null);
+    const [editPlaylistName, setEditPlaylistName] = useState("");
 
     // useEffect, hogy azonnal lekérje és frissítse a kedvenc playlisteket és zeneszámokat
     useEffect(() => {
@@ -109,25 +110,85 @@ function PlayList() {
         return length;
     }
 
+    const handleEditPlaylist = (playlistId, currentName) => {
+        setEditPlaylistId(playlistId);
+        setEditPlaylistName(currentName);
+    };
+
+    // Playlist név mentése szerkesztés után
+    const saveEditedPlaylistName = async (playlistId, newName) => {
+        try {
+            const response = await fetch(`http://localhost:3000/editPlaylistName`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ playlistId, newName })
+            });
+            if (response.ok) {
+                console.log(`Playlist ${playlistId} name updated successfully`);
+                // Frissítsük a kedvenc playlisteket
+                const updatedFavorites = favorites.map(playlist => {
+                    if (playlist.id === playlistId) {
+                        return { ...playlist, name: newName };
+                    }
+                    return playlist;
+                });
+                setFavorites(updatedFavorites);
+                setEditPlaylistId(null); // Szerkesztés befejezése
+            } else {
+                console.error('Failed to update playlist name');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    // Playlist név visszaállítása eredeti állapotra
+    const cancelEditPlaylistName = () => {
+        setEditPlaylistId(null);
+        setEditPlaylistName("");
+    };
+
+
     return (
         <div>
             <ul>
                 {favorites.map(playlist => (
                     <li key={playlist.id} className="playListsLi">
-                        {playlist.name}
-                        <Fab
-                            size="small"
-                            color="primary"
-                            aria-label="expand"
-                            onClick={() => togglePlaylist(playlist.id)}
-                            className="add-icon"
-                        >
-                            
+                        {editPlaylistId === playlist.id ? (
+                            <div>
+                            <input
+                                className="editplaylist"
+                                type="text"
+                                value={editPlaylistName}
+                                onChange={(e) => setEditPlaylistName(e.target.value)}
+                            />
+                            <IconButton aria-label="save" onClick={() => saveEditedPlaylistName(playlist.id, editPlaylistName)}>
+                                <AddIcon />
+                            </IconButton>
+                            <IconButton aria-label="cancel" onClick={cancelEditPlaylistName}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </div>
+                        ) : (
+                            <div>
+                                {playlist.name}
+                                <Fab
+                                    size="small"
+                                    color="primary"
+                                    aria-label="expand"
+                                    onClick={() => togglePlaylist(playlist.id)}
+                                    className="add-icon"
+                                >
                             <AddIcon />
                             
                         </Fab>
                         <IconButton aria-label="delete" onClick={() => deletePlaylist(playlist.id)}>
                             <DeleteIcon />
+                        </IconButton>
+                        <IconButton aria-label="edit" onClick={() => handleEditPlaylist(playlist.id, playlist.name)}>
+                             <EditIcon />
                         </IconButton>
                         {openPlaylists[playlist.id] && (
                             <ul className="playlist-songs">
@@ -141,6 +202,8 @@ function PlayList() {
                                     </li>
                                 ))}
                             </ul>
+                        )}
+                         </div>
                         )}
                     </li>
                 ))}

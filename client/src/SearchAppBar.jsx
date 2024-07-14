@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from "react";
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,8 +12,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
-import { Link } from 'react-router-dom';
-
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const pages = ['Favorites'];
 
@@ -59,7 +58,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function SearchAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -69,16 +72,66 @@ function SearchAppBar() {
     setAnchorElNav(null);
   };
 
+  const handleSearchInputChange = async (event) => {
+    const query = event.target.value;
+    setSearchText(query);
+
+    console.log("Keresés:", query);
+
+    try {
+      const response = await fetch(`http://localhost:3000/search?q=${query}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Keresési eredmények:", data);
+
+        if (data.results && Array.isArray(data.results.rows)) {
+          const results = data.results.rows.map((row) => ({
+            id: row.id,
+            name: row.name,
+            url: row.url // Hozzáadhatunk egy URL-t az elemhez, ahol az található az oldalon
+          }));
+          setSearchResults(results);
+        } else {
+          console.error('Nem várt keresési eredmény struktúra:', data);
+        }
+      } else {
+        console.error('Keresési eredmények lekérése sikertelen');
+      }
+    } catch (error) {
+      console.error('Hiba történt a keresési eredmények lekérésében:', error);
+    }
+  };
+
+  const handleSearchResultClick = (result) => {
+    console.log("Kiválasztott eredmény:", result);
+    navigate(result.url);
+    handleResultClick(result.id); // Hozzáadva: görgetés az adott elemhez
+    setSearchText("");
+    setSearchResults([]);
+  };
+
+  const handleResultClick = (id) => {
+    // Gördesd le az oldalt az adott elemhez
+    const element = document.getElementById(`artist_${id}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  useEffect(() => {
+    setSearchText("");
+    setSearchResults([]);
+  }, [location.pathname]); // Reset search state when pathname changes
+
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#6F4E37' }}> 
+    <AppBar position="static" sx={{ backgroundColor: '#6F4E37' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-        <img
+          <img
             src="../images/logo_without_bg.png"
             alt="logo"
             style={{ display: { xs: 'none', md: 'flex' }, marginRight: '10px', height: '40px' }}
           />
-          
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -110,9 +163,9 @@ function SearchAppBar() {
               }}
             >
               {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center"><Link to="/favorites"style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link></Typography>
-                    </MenuItem>
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center"><Link to="/favorites" style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link></Typography>
+                </MenuItem>
               ))}
             </Menu>
           </Box>
@@ -129,15 +182,32 @@ function SearchAppBar() {
             ))}
           </Box>
 
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+          {location.pathname !== "/favorites" && ( // Render search input only if not on /favorites
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                value={searchText}
+                onChange={handleSearchInputChange}
+              />
+              {searchResults.length > 0 && (
+                <Box sx={{ position: 'absolute', backgroundColor: 'grey', boxShadow: 1, zIndex: 1, width: '100%' }}>
+                  {searchResults.map((result) => (
+                    <Box
+                      key={result.id}
+                      sx={{ padding: 1, cursor: 'pointer' }}
+                      onClick={() => handleSearchResultClick(result)}
+                    >
+                      {result.name}
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </Search>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

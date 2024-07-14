@@ -81,3 +81,14 @@ ul {
     text-align: right;
   }
   
+  .editplaylist{
+      background-color: rgb(141, 141, 115);
+      font-family: 'Franklin Gothic', sans-serif;
+      font-size: 35px;
+      color: white;
+      border-radius: 20cap;
+      padding-left:20px;
+      margin-top:20px;
+      margin-right:20px;
+
+  }

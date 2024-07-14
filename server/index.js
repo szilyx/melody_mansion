@@ -152,6 +152,45 @@ app.post("/deleteSong", async (req, res) => {
     }
 });
 
+app.get("/search", async (req, res) => {
+    const { q } = req.query;
+  
+    try {
+      // Példának szánt adatbázis lekérdezés a keresett kifejezés alapján
+      const results = await db.query("SELECT * FROM artists WHERE name ILIKE $1", [`%${q}%`]);
+      res.status(200).json({ results });
+    } catch (err) {
+      console.error("Error searching:", err);
+      res.status(500).json({ error: "Failed to search" });
+    }
+  });
+
+  app.get("/searchPlaylists", async (req, res) => {
+    const { q } = req.query;
+  
+    try {
+      // Példának szánt adatbázis lekérdezés a keresett kifejezés alapján
+      const results = await db.query("SELECT * FROM favorites WHERE name ILIKE $1", [`%${q}%`]);
+      res.status(200).json({ results });
+    } catch (err) {
+      console.error("Error searching:", err);
+      res.status(500).json({ error: "Failed to search" });
+    }
+  });
+
+app.post("/editPlaylistName", async (req, res) => {
+    const { playlistId, newName } = req.body;
+
+    try {
+        await db.query("UPDATE favorites SET name = $1 WHERE id = $2", [newName, playlistId]);
+        res.status(200).json({ message: `Playlist ${playlistId} name updated successfully` });
+    } catch (err) {
+        console.error("Error updating playlist name:", err);
+        res.status(500).json({ error: "Failed to update playlist name" });
+    }
+});
+
+
 app.post("/deletePlaylist", async (req, res) => {
     const { playlistId} = req.body;
 
