@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-
+import ClickAway from "./ClickAway";
 function ListItem({ artist }) {
   const [open, setOpen] = useState(false);
   const [albums, setAlbums] = useState([]);
@@ -66,6 +66,7 @@ function ListItem({ artist }) {
                     <li key={song.id} className="song-item">
                         <span className="song-title">{song.title}</span>
                         <span className="song-length">{song.length.hours}:{song.length.minutes}</span>
+                        <ClickAway artistId={artist.id} songId={song.id} />
                     </li>
                     ))}
                 </ul>

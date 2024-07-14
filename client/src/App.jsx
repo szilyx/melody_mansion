@@ -3,6 +3,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Header from "./Header";
 import MainPage from "./MainPage";
 import ListItem from "./ListItem";
+import { ErrorBoundary } from 'react-error-boundary'
 import "./ListItem.css";
 import "./App.css";
 
@@ -16,6 +17,16 @@ const theme = createTheme({
     },
   },
 });
+
+function MyFallbackComponent({ error, resetErrorBoundary }) {
+  return (
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <pre>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </div>
+  )
+}
 
 function App() {
   const [artists, setArtists] = useState([]);
@@ -37,6 +48,13 @@ function App() {
   }, []);
 
   return (
+    <ErrorBoundary
+    FallbackComponent={MyFallbackComponent}
+    onReset={() => {
+      // reset the state of your app here
+    }}
+    resetKeys={['someKey']}
+  >
     <ThemeProvider theme={theme}>
       <Header />
       <MainPage />
@@ -51,6 +69,7 @@ function App() {
         </ul>
       </div>
     </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 

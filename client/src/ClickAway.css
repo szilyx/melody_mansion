@@ -1,0 +1,5 @@
+.playlist_li li:hover{
+    background-color: beige;
+    padding:10px;
+    border-radius: 20cap;
+}
