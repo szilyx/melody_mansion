@@ -14,7 +14,10 @@ import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const pages = ['Favorites'];
+const pages = [
+  { name: 'Home', path: '/' },
+  { name: 'Favorites', path: '/favorites' }
+];
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -163,8 +166,12 @@ function SearchAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center"><Link to="/favorites" style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link></Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">
+                    <Link to={page.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {page.name}
+                    </Link>
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -173,11 +180,13 @@ function SearchAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                <Link to="/favorites" style={{ textDecoration: 'none', color: 'inherit' }}>{page}</Link>
+                <Link to={page.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {page.name}
+                </Link>
               </Button>
             ))}
           </Box>

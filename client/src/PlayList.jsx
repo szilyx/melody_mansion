@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 
 function PlayList() {
     const [favorites, setFavorites] = useState([]);
@@ -181,7 +182,7 @@ function PlayList() {
                                     onClick={() => togglePlaylist(playlist.id)}
                                     className="add-icon"
                                 >
-                            <AddIcon />
+                            <ArrowDropDownCircleIcon />
                             
                         </Fab>
                         <IconButton aria-label="delete" onClick={() => deletePlaylist(playlist.id)}>

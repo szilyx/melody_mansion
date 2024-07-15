@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "react-error-boundary": "^4.0.13",
-    "react-popup-alert": "^2.0.0"
-  }
-}

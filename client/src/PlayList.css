@@ -1,26 +1,35 @@
-.playListsLi{
+body {
+    background-color: rgb(145, 125, 95);
+    background-image: url("images/second_background_image.png");
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.playListsLi {
     color: rgb(69, 68, 68);
     font-family: 'Franklin Gothic', sans-serif;
     background-color: beige;
-    font-size:30px;
-    margin:20px;
-    padding:10px 10px 10px 30px;
-    border-radius: 2cap;
-    width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    border-left:0px;
+    font-size: 30px;
+    margin: 20px auto;
+    padding: 10px 10px 10px 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    border-left: 0;
+    box-sizing: border-box;
 }
 
-.playLists-opened{
-    border-radius: 0cap;
+.playLists-opened {
+    border-radius: 0;
 }
+
 .add-icon {
     float: right;
     margin-left: 10px;
 }
-.song-item{
-    margin-top:20px;
+
+.song-item {
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,6 +38,23 @@
     font-size: 20px;
 }
 
-.playlist-songs{
-    padding:0px;
+.playlist-songs {
+    padding: 0;
+}
+
+@media (max-width: 600px) {
+    .playListsLi {
+        width: 90%;
+        font-size: 24px;
+        padding: 10px;
+    }
+
+    .song-item {
+        font-size: 16px;
+        padding: 5px;
+    }
+
+    .add-icon {
+        margin-left: 5px;
+    }
 }

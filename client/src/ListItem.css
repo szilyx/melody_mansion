@@ -1,94 +1,138 @@
-.listItem{
-    background-color: beige;
-    border-radius: 10cap;
-    padding-left:10px;
-    width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+body {
+  background-color: rgb(145, 125, 95);
+  background-image: url("images/second_background_image.png");
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 
-.listItem h1{
-    display: flex;
-    align-items: center;
-    color: rgb(69, 68, 68);
-    font-family: 'Franklin Gothic', sans-serif;
-    padding:5px;
-    padding-right: 20px;
-    
+.listItem {
+  background-color: beige;
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.listItem h1 {
+  display: flex;
+  align-items: center;
+  color: rgb(69, 68, 68);
+  font-family: 'Franklin Gothic', sans-serif;
+  padding: 5px;
+  padding-right: 20px;
+  margin: 0;
 }
 
 ul {
-    list-style-type: none;
-  }
-  
-.spacer {
-    flex-grow: 1;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
-.listItem p{
-    display: flex;
-    align-items: center;
-    color: rgb(255, 255, 255);
-    font-family: 'Franklin Gothic', sans-serif;
-    padding:5px;
-    font-size:25px;
-    padding-left:30px;
-    margin-left:20px;
-    background-color: rgb(141, 141, 115);
-    padding-right:10px;
-    padding-top:5px;
-    padding-bottom:5px;
-    margin-bottom:0px;
-    border-bottom:0px;
+.spacer {
+  flex-grow: 1;
+}
+
+.listItem p {
+  display: flex;
+  align-items: center;
+  color: rgb(255, 255, 255);
+  font-family: 'Franklin Gothic', sans-serif;
+  padding: 15px;
+  font-size: 25px;
+  background-color: rgb(141, 141, 115);
+  margin: 0 0 10px 0;
+  border-bottom: 0;
+  margin-bottom: 0px;
+  margin-top:10px;
 }
 
 .albums {
   margin-top: 10px;
-  transition: opacity 0.3s ease; 
-  padding-bottom:20px;
-  width:560px;
-  
+  transition: opacity 0.3s ease;
+  padding-bottom: 20px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.listed-songs{
-    font-size: 20px;
-    background-color: rgb(189, 189, 161);
-    border-radius: 0 0 2cap 2cap;
-    padding-top:10px;
-    margin-top:0;
-    border-top:0;
-    margin-left:20px;
-    padding-bottom:10px;
-    list-style-type: none;
-    padding: 30px;
-    
+.listed-songs {
+  font-size: 20px;
+  background-color: rgb(189, 189, 161);
+  border-radius: 0 0 2cap 2cap;
+  padding: 10px 30px;
+  margin: 0;
+  list-style-type: none;
+  margin-bottom:20px;
 }
 
+.song-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  font-family: 'Franklin Gothic', sans-serif;
+}
+
+.song-title {
+  flex-grow: 1;
+}
+
+.song-length {
+  text-align: right;
+}
+
+.editplaylist {
+  background-color: rgb(141, 141, 115);
+  font-family: 'Franklin Gothic', sans-serif;
+  font-size: 35px;
+  color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin: 20px auto;
+  display: block;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .listItem {
+      width: 90%;
+      padding: 10px;
+  }
+
+  .listItem h1 {
+      font-size: 24px;
+      padding-right: 10px;
+  }
+
+  .listItem p {
+      font-size: 18px;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-bottom:0px;
+  }
+
+  .albums {
+      width: 90%;
+  }
+
+  .listed-songs {
+      font-size: 16px;
+      padding: 10px 15px;
+      border-radius: 0 0 2cap 2cap;
+  }
 
   .song-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    font-family: 'Franklin Gothic', sans-serif;
+      padding: 5px;
+      font-size: 16px;
   }
-  
-  .song-title {
-    flex-grow: 1;
-  }
-  
-  .song-length {
-    text-align: right;
-  }
-  
-  .editplaylist{
-      background-color: rgb(141, 141, 115);
-      font-family: 'Franklin Gothic', sans-serif;
-      font-size: 35px;
-      color: white;
-      border-radius: 20cap;
-      padding-left:20px;
-      margin-top:20px;
-      margin-right:20px;
 
+  .editplaylist {
+      font-size: 24px;
+      padding: 10px;
   }
+}

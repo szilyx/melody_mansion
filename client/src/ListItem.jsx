@@ -4,6 +4,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import ClickAway from "./ClickAway";
 import { Link, useNavigate } from 'react-router-dom';
+import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 
 function ListItem({ artist }) {
   const [open, setOpen] = useState(false);
@@ -67,7 +68,7 @@ function ListItem({ artist }) {
         <LibraryMusicIcon style={{ paddingRight: 20 }} />{artist.name}
         <span className="spacer"></span>
         <Fab size="small" color="secondary" aria-label="add" onClick={expand}>
-          <AddIcon />
+          <ArrowDropDownCircleIcon />
         </Fab>
       </h1>
       {open && (
@@ -77,7 +78,7 @@ function ListItem({ artist }) {
               <p style={{ borderRadius: openAlbums[album.id] ? "20px 20px 0px 0px" : "20px" }}>{album.title}
                 <span className="spacer"> </span>
                 <Fab size="small" color="secondary" aria-label="add" onClick={() => toggleAlbum(album.id)}>
-                  <AddIcon />
+                <ArrowDropDownCircleIcon />
                 </Fab>
               </p>
               {openAlbums[album.id] && (

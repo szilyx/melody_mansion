@@ -1,62 +1,71 @@
-body{
-	background-color: rgb(145, 125, 95);
-	background-image: url("images/second_background_image.png"); ;
+body {
+    background-color: rgb(145, 125, 95);
+    background-image: url("images/second_background_image.png");
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
-.main-page{
-    border:0;
-    margin:0;
-    padding:0;
-    height: 710px;
+
+.main-page {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* A teljes képernyő magassága */
     width: 100%;
     background-image: url("images/main_background_image.png");
     background-size: cover;
-}
-.main-page h1{
-    font-family: 'Franklin Gothic', sans-serif;      
-	font-size: 120px;
-	text-align: center;
-	padding: 0;
-    padding-top:200px;
-	margin: 0;
-	margin-left: 50%;
-	transform: translateX(-200%);
-	opacity: 0;
-	animation: slide-in-anim 1.5s ease-out forwards;
-    color:white;
-}
-
-.main-page p{
-    color:white;
-    font-family: 'Franklin Gothic', sans-serif;  
-    font-size:40px;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-	animation: fadeIn 5s;
 }
+
+.main-page h1 {
+    font-family: 'Franklin Gothic', sans-serif;
+    font-size: 8vw; /* Dinamikus méret */
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    animation: slide-in-anim 1.5s ease-out forwards;
+    color: white;
+}
+
+.main-page p {
+    color: white;
+    font-family: 'Franklin Gothic', sans-serif;
+    font-size: 3vw; /* Dinamikus méret */
+    animation: fadeIn 5s;
+}
+
 @keyframes fadeIn {
-	0% { opacity: 0; }
-	100% { opacity: 1; }
-  }
-
-  
-@keyframes slide-in-anim {
-	20% {
-		opacity: 0;
-	}
-	60% {
-		transform: translateX(-45%);
-	}
-	75% {
-		transform: translateX(-52%);
-	}
-	100% {
-		opacity: 1;
-		transform: translateX(-50%);
-	}
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
+@keyframes slide-in-anim {
+    20% {
+        opacity: 0;
+    }
+    60% {
+        transform: translateX(0); /* Középre igazítva */
+    }
+    75% {
+        transform: translateX(0); /* Középre igazítva */
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0); /* Középre igazítva */
+    }
+}
 
-body{
-    border:0;
-    margin:0;
-    padding:0;
+@media (max-width: 600px) {
+    .main-page h1 {
+        font-size: 10vw; /* Mobil nézethez igazított méret */
+    }
+
+    .main-page p {
+        font-size: 6vw; /* Mobil nézethez igazított méret */
+    }
 }
