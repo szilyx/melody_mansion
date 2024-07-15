@@ -7,6 +7,6 @@ PG_PORT="5432"
 )
 2. run "npm i" to install node modules
 3. run "npx nodemon index.js" for backend server
-4. cd over to client folder and run "npm i"
+4. open a new bash terminal and cd over to client folder and run "npm i"
 5. run "npm run dev"
 6. open the given localhost link to open the website
