@@ -3,11 +3,10 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Header from "./Header";
 import MainPage from "./MainPage";
 import ListItem from "./ListItem";
-import { ErrorBoundary } from 'react-error-boundary'
 import "./ListItem.css";
 import "./App.css";
 
-const theme = createTheme({
+const theme = createTheme({ // A palette ot set the primary and secoandary color for the react MUI components
   palette: {
     primary: {
       main: "#2196f3",
@@ -18,15 +17,6 @@ const theme = createTheme({
   },
 });
 
-function MyFallbackComponent({ error, resetErrorBoundary }) {
-  return (
-    <div role="alert">
-      <p>Something went wrong:</p>
-      <pre>{error.message}</pre>
-      <button onClick={resetErrorBoundary}>Try again</button>
-    </div>
-  )
-}
 
 function App() {
   const [artists, setArtists] = useState([]);
@@ -34,7 +24,7 @@ function App() {
   useEffect(() => {
     async function fetchArtists() {
       try {
-        const resp = await fetch("http://localhost:3000/artists");
+        const resp = await fetch("http://localhost:3000/artists"); //This will load all of the artists from the database
         if (!resp.ok) {
           throw new Error("Network response was not ok");
         }
@@ -48,28 +38,20 @@ function App() {
   }, []);
 
   return (
-    <ErrorBoundary
-    FallbackComponent={MyFallbackComponent}
-    onReset={() => {
-      // reset the state of your app here
-    }}
-    resetKeys={['someKey']}
-  >
     <ThemeProvider theme={theme}>
-      <Header />
+      <Header />  
       <MainPage />
       <div className="container">
         <h1 id="main-title">Artists</h1>
         <ul>
           {artists.map((artist) => (
-            <li key={artist.id}>
+            <li key={artist.id}>   {/* the map function will load all of the artists in a ListItem component*/}
               <ListItem artist={artist} />
             </li>
           ))}
         </ul>
       </div>
     </ThemeProvider>
-    </ErrorBoundary>
   );
 }
 

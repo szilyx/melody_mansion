@@ -2,15 +2,18 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import cors from "cors";
+import dotenv from "dotenv";
+
 const app = express();
 const port = 3000;
-
+dotenv.config();
+//For safety reason you need to create your own .env file with the db variables.
 const db = new pg.Client({
-    user:"postgres",
-    host:"localhost",
-    database:"MusicDB",
-    password:"szili",
-    port:5432,
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    password: process.env.PG_PASSWORD,
+    port: process.env.PG_PORT,
 })
 
 db.connect();
@@ -19,6 +22,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 
+//Fetch the artist
 app.get("/artists",async (req, res) =>{
     try{
         const result = await db.query("SELECT * from artists");
@@ -30,6 +34,7 @@ app.get("/artists",async (req, res) =>{
     }
 });
 
+//Fetch the albums
 app.get("/albums", async (req, res) =>{
     const {artistId} = req.query;
     if(!artistId){
@@ -45,6 +50,7 @@ app.get("/albums", async (req, res) =>{
     }
 });
 
+//Fetch the songs by album_id
 app.get("/songs", async (req, res) =>{
     const {albumId} = req.query;
     if(!albumId){
@@ -60,6 +66,7 @@ app.get("/songs", async (req, res) =>{
     }
 });
 
+//feetch the Songs by Id
 app.get("/songsById", async (req, res) =>{
     const {songId} = req.query;
     if(!songId){
@@ -73,6 +80,7 @@ app.get("/songsById", async (req, res) =>{
     }
 })
 
+//feth the playlists
 app.get("/favorites",async (req, res) =>{
     try{
         const result = await db.query("SELECT * FROM favorites");
@@ -83,6 +91,7 @@ app.get("/favorites",async (req, res) =>{
     }
 })
 
+//fetch the table that conatains the playlist and songs id
 app.get("/favoriteSongs", async (req, res) =>{
     try{
         const result = await db.query("SELECT * FROM favoritesongs");
@@ -93,6 +102,7 @@ app.get("/favoriteSongs", async (req, res) =>{
     }
 })
 
+//fetch the songs of the playlist
 app.get("/favoriteSongsByPlaylist", async (req, res) => {
     const { playlistId } = req.query;
     if (!playlistId) {
@@ -107,6 +117,7 @@ app.get("/favoriteSongsByPlaylist", async (req, res) => {
     }
 });
 
+//Insert a new playlist
 app.post("/favoritesPost", async (req, res) =>{
     const {name} = req.body;
     if(!name){
@@ -121,6 +132,7 @@ app.post("/favoritesPost", async (req, res) =>{
     }
 })
 
+//Add songs to playlist
 app.post("/addToPlaylist", async (req, res) => {
     const { playListId, songId } = req.body;
     if (!playListId || !songId) {
@@ -135,6 +147,7 @@ app.post("/addToPlaylist", async (req, res) => {
     }
 });
 
+//Delete a song from the db
 app.post("/deleteSong", async (req, res) => {
     const { playlistId, songId } = req.body;
 
@@ -152,11 +165,11 @@ app.post("/deleteSong", async (req, res) => {
     }
 });
 
+//Search for an artist
 app.get("/search", async (req, res) => {
     const { q } = req.query;
   
     try {
-      // Példának szánt adatbázis lekérdezés a keresett kifejezés alapján
       const results = await db.query("SELECT * FROM artists WHERE name ILIKE $1", [`%${q}%`]);
       res.status(200).json({ results });
     } catch (err) {
@@ -165,19 +178,7 @@ app.get("/search", async (req, res) => {
     }
   });
 
-  app.get("/searchPlaylists", async (req, res) => {
-    const { q } = req.query;
-  
-    try {
-      // Példának szánt adatbázis lekérdezés a keresett kifejezés alapján
-      const results = await db.query("SELECT * FROM favorites WHERE name ILIKE $1", [`%${q}%`]);
-      res.status(200).json({ results });
-    } catch (err) {
-      console.error("Error searching:", err);
-      res.status(500).json({ error: "Failed to search" });
-    }
-  });
-
+//Update the playlist names
 app.post("/editPlaylistName", async (req, res) => {
     const { playlistId, newName } = req.body;
 
@@ -190,7 +191,7 @@ app.post("/editPlaylistName", async (req, res) => {
     }
 });
 
-
+//Delete a playlist
 app.post("/deletePlaylist", async (req, res) => {
     const { playlistId} = req.body;
 
@@ -207,10 +208,6 @@ app.post("/deletePlaylist", async (req, res) => {
         return res.status(500).json({ error: "Error while deleting data" });
     }
 });
-
-
-
-
 
 app.listen(port, ()=>{
     console.log(`Server is running on http://localhost:${port}`)

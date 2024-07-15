@@ -13,10 +13,12 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-
+//This jsx file is for the navbar.
+//This code is mostly imported from React MUI, and made some changes like the page elements, and to make the sarch work.
 const pages = [
   { name: 'Home', path: '/' },
   { name: 'Favorites', path: '/favorites' }
+  //The pages shown on the navigation bar
 ];
 
 const Search = styled('div')(({ theme }) => ({
@@ -80,41 +82,37 @@ function SearchAppBar() {
     setSearchText(query);
 
     console.log("Keresés:", query);
-
+    //This will fatch an API that will search and autocpmplete the artist name
     try {
       const response = await fetch(`http://localhost:3000/search?q=${query}`);
       if (response.ok) {
         const data = await response.json();
-        console.log("Keresési eredmények:", data);
-
         if (data.results && Array.isArray(data.results.rows)) {
           const results = data.results.rows.map((row) => ({
             id: row.id,
             name: row.name,
-            url: row.url // Hozzáadhatunk egy URL-t az elemhez, ahol az található az oldalon
+            url: row.url
           }));
           setSearchResults(results);
         } else {
-          console.error('Nem várt keresési eredmény struktúra:', data);
+          console.error('Error in searchin for artist:', data);
         }
       } else {
-        console.error('Keresési eredmények lekérése sikertelen');
+        console.error('Error while fetching data');
       }
     } catch (error) {
-      console.error('Hiba történt a keresési eredmények lekérésében:', error);
+      console.error('Error in searchin for artist:', error);
     }
   };
 
   const handleSearchResultClick = (result) => {
-    console.log("Kiválasztott eredmény:", result);
     navigate(result.url);
-    handleResultClick(result.id); // Hozzáadva: görgetés az adott elemhez
+    handleResultClick(result.id);
     setSearchText("");
     setSearchResults([]);
   };
 
   const handleResultClick = (id) => {
-    // Gördesd le az oldalt az adott elemhez
     const element = document.getElementById(`artist_${id}`);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -127,6 +125,7 @@ function SearchAppBar() {
   }, [location.pathname]); // Reset search state when pathname changes
 
   return (
+    //set the elements of the navbar
     <AppBar position="static" sx={{ backgroundColor: '#6F4E37' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -165,6 +164,7 @@ function SearchAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
+              {/* Load the given pages*/}
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">

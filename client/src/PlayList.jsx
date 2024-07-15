@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
-
+//This jsx file will list all of the playlists we created
 function PlayList() {
     const [favorites, setFavorites] = useState([]);
     const [songs, setSongs] = useState({});
@@ -15,11 +15,11 @@ function PlayList() {
     const [editPlaylistId, setEditPlaylistId] = useState(null);
     const [editPlaylistName, setEditPlaylistName] = useState("");
 
-    // useEffect, hogy azonnal lekérje és frissítse a kedvenc playlisteket és zeneszámokat
+
+    // useEffect to fetch the datas whenewer we add a new album, delete or edit one.
     useEffect(() => {
         async function fetchData() {
             try {
-                // Lekérjük a kedvenc playlisteket
                 const favoritesResp = await fetch("http://localhost:3000/favorites");
                 if (!favoritesResp.ok) {
                     throw new Error(`Error fetching favorites: ${favoritesResp.statusText}`);
@@ -28,7 +28,7 @@ function PlayList() {
                 //console.log("Favorites:", favoritesData);
                 setFavorites(favoritesData);
 
-                // Lekérjük a kedvenc playlistekhez tartozó zeneszámok ID-jait és a zeneszámokat
+               //Fetch the songs of the playlist
                 const songsData = {};
                 for (const playlist of favoritesData) {
                     const favoritesongsResp = await fetch(`http://localhost:3000/favoriteSongsByPlaylist?playlistId=${playlist.id}`);
@@ -38,7 +38,7 @@ function PlayList() {
                     const favoritesongs = await favoritesongsResp.json();
                     //console.log(`Favoritesongs for playlist ${playlist.id}:`, favoritesongs);
 
-                    // Lekérjük a zeneszámok részleteit
+                    //Fetch the datas of the song (name, and length);
                     const songDetails = await Promise.all(favoritesongs.map(async (favoritesong) => {
                         const songResp = await fetch(`http://localhost:3000/songsById?songId=${favoritesong.song_id}`);
                         if (!songResp.ok) {
@@ -63,8 +63,11 @@ function PlayList() {
             [playlistId]: !prev[playlistId]
         }));
     }
+
+    //We use this function to delete a song
     const deleteSong = async (playlistId, songId) => {
         try {
+            //Calls the backend API with delete statement
             const response = await fetch(`http://localhost:3000/deleteSong`, {
                 method: 'POST',
                 headers: {
@@ -82,7 +85,7 @@ function PlayList() {
             console.error('Error:', error);
         }
     };
-
+    //This function deletes the selected playlist
     const deletePlaylist = async (playlistId) => {
         try {
             const response = await fetch(`http://localhost:3000/deletePlaylist`, {
@@ -116,7 +119,7 @@ function PlayList() {
         setEditPlaylistName(currentName);
     };
 
-    // Playlist név mentése szerkesztés után
+    // Playlist mame save after editing
     const saveEditedPlaylistName = async (playlistId, newName) => {
         try {
             const response = await fetch(`http://localhost:3000/editPlaylistName`, {
@@ -128,15 +131,15 @@ function PlayList() {
             });
             if (response.ok) {
                 console.log(`Playlist ${playlistId} name updated successfully`);
-                // Frissítsük a kedvenc playlisteket
                 const updatedFavorites = favorites.map(playlist => {
                     if (playlist.id === playlistId) {
                         return { ...playlist, name: newName };
+                        //update the name
                     }
                     return playlist;
                 });
                 setFavorites(updatedFavorites);
-                setEditPlaylistId(null); // Szerkesztés befejezése
+                setEditPlaylistId(null);
             } else {
                 console.error('Failed to update playlist name');
             }
@@ -145,7 +148,7 @@ function PlayList() {
         }
     };
 
-    // Playlist név visszaállítása eredeti állapotra
+    //Cancel the playlist name editing
     const cancelEditPlaylistName = () => {
         setEditPlaylistId(null);
         setEditPlaylistName("");
@@ -157,6 +160,7 @@ function PlayList() {
             <ul>
                 {favorites.map(playlist => (
                     <li key={playlist.id} className="playListsLi">
+                        {/* Check if we are editing that playlist, if yes, rendert this:*/}
                         {editPlaylistId === playlist.id ? (
                             <div>
                             <input
@@ -191,6 +195,7 @@ function PlayList() {
                         <IconButton aria-label="edit" onClick={() => handleEditPlaylist(playlist.id, playlist.name)}>
                              <EditIcon />
                         </IconButton>
+                        {/* Show the song of the playlist if its opened*/}
                         {openPlaylists[playlist.id] && (
                             <ul className="playlist-songs">
                                 {songs[playlist.id]?.map(song => (
@@ -203,7 +208,7 @@ function PlayList() {
                                     </li>
                                 ))}
                             </ul>
-                        )}
+                            )}
                          </div>
                         )}
                     </li>

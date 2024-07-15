@@ -6,9 +6,10 @@ import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import NavigationIcon from '@mui/icons-material/Navigation';
-
+//This component is for the Playlist creating element
 function CreateList(){
     const [open, setOpen] = useState(false);
+    //Check if the create section is opened or not.
     const [name, setName] = useState("");
     function handleChange(event){
         console.log(event.target.value);
@@ -22,6 +23,7 @@ function CreateList(){
         event.preventDefault();
     try {
       const response = await fetch('http://localhost:3000/favoritesPost', {
+        //fetching the playlist creating API from the backend
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -40,34 +42,36 @@ function CreateList(){
     }
     }
     return(
-        <div className="listItem" style={{ borderRadius: open ? "2cap" : null }}>
-      <h1>
-       Create Playlist
-        <span className="spacer"></span>
-        <Fab size="small" color="primary" aria-label="add" onClick={expand}>
-          <AddIcon />
-        </Fab>
-      </h1>
-      {open && (
-        <div className={`albums ${open ? 'open' : ''}`}>
-            <div  className="album-item">
-                <form action="submit" onSubmit={handleClick}>
-                    <input type="text" className="inputPlaylist"
-                    onChange={handleChange}
-                    value={name}/>
-                        <Fab
-                            type="submit"
-                            variant="extended"
-                            className="navigationIcon"
-                            sx={{ marginBottom: 2 }}
-                            >
-                            <NavigationIcon sx={{ mr: 1 }} />
-                            Create
-                        </Fab>
-                </form>
-            </div>
-        </div>
-      )}
+      <div className="listItem" style={{ borderRadius: open ? "2cap" : null }}>
+        {/*if its opened, change the css*/}
+        <h1>
+            Create Playlist
+          <span className="spacer"></span>
+          <Fab size="small" color="primary" aria-label="add" onClick={expand}>
+            <AddIcon />
+          </Fab>
+        </h1>
+        {open && (
+          <div className={`albums ${open ? 'open' : ''}`}>
+              <div  className="album-item">
+                  <form action="submit" onSubmit={handleClick}>
+                    {/* Call the inserting action on click*/}
+                      <input type="text" className="inputPlaylist"
+                      onChange={handleChange}
+                      value={name}/>
+                          <Fab
+                              type="submit"
+                              variant="extended"
+                              className="navigationIcon"
+                              sx={{ marginBottom: 2 }}
+                              >
+                              <NavigationIcon sx={{ mr: 1 }} />
+                              Create
+                          </Fab>
+                  </form>
+              </div>
+          </div>
+        )}
     </div>
     )
 }

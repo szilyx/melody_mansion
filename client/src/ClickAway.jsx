@@ -2,17 +2,21 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import FloatingActionButtonSize from './FloatingActionButtonSize';
-
 import "./ClickAway.css";
+
+//This jsx file is a component for the dorpdown list of the playlist where we can add the songs to the playlists
 
 function ClickAway({ artistId, songId }) {
   const [open, setOpen] = useState(false);
+  //This will decide if the list is opened or not
   const [favorites, setFavorites] = useState([]);
+  //We are using useState to set the songs into an array
 
   useEffect(() => {
     async function fetchPlayList() {
       try {
         const result = await fetch("http://localhost:3000/favorites");
+        //Getting the list of the playlists ("favorites")
         const data = await result.json();
         setFavorites(data);
       } catch (error) {
@@ -34,6 +38,7 @@ function ClickAway({ artistId, songId }) {
     try {
       alert("Song added to your playlist");
       const response = await fetch(`http://localhost:3000/addToPlaylist`, {
+        //This will call an insert API from the backend which will add the song for the playlist
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -89,6 +94,7 @@ function ClickAway({ artistId, songId }) {
                 <li key={playlist.id} style={listItemStyles} onClick={() => handleAddToPlaylist(playlist.id)}>
                   {playlist.name}
                 </li>
+                /*We list the playlsit from the favorites array and add an onClick eventlsitener to each of them*/
               ))}
             </ul>
           </Box>

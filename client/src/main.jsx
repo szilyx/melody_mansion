@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+//Creating routes for the different pages
 import {
     createBrowserRouter,
     RouterProvider,
